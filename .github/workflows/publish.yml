@@ -1,0 +1,14 @@
+name: publish
+on:
+  release:
+    types: [published]
+jobs:
+  publish:
+    permissions:
+      id-token: write # required for pub.dev automated publishing (OIDC)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+      - run: dart pub get
+      - run: dart pub publish --force
