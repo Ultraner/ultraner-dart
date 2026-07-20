@@ -38,7 +38,9 @@ class Ultraner {
     final uri = Uri.parse('$baseUrl$path');
     final req = await _http.openUrl(method, uri);
     req.headers.set(HttpHeaders.contentTypeHeader, 'application/json');
-    req.headers.set(HttpHeaders.authorizationHeader, 'Bearer $apiKey');
+    // Ultraner API keys authenticate via X-API-Key (Authorization: Bearer is
+    // reserved for user JWTs and would be rejected for a uk_ key).
+    req.headers.set('X-API-Key', apiKey);
     if (body != null) {
       req.add(utf8.encode(jsonEncode(body)));
     }
@@ -90,6 +92,13 @@ class Ultraner {
   // PayPal / Stripe
   Future<dynamic> createPaypalOrder(Map<String, dynamic> body) => request('POST', '/paypal/orders', body);
   Future<dynamic> createStripeSession(Map<String, dynamic> body) => request('POST', '/stripe/sessions', body);
+
+  // Checkout sessions, mint a one-time, expiring checkout token (the Stripe
+  // checkout.sessions.create parity) without touching the dashboard.
+  Future<dynamic> createCheckoutSession(Map<String, dynamic> body) =>
+      request('POST', '/v0/checkout/sessions', body);
+  Future<dynamic> retrieveCheckoutSession(String token) =>
+      request('GET', '/v0/pay/resolve/${Uri.encodeComponent(token)}');
 
   void close() => _http.close();
 }

@@ -1,6 +1,6 @@
 name: ultraner
 description: Ultraner Dart SDK, one API for payments across Africa (mobile money, cards, PayPal, wallets).
-version: 0.1.0
+version: 0.2.0
 homepage: https://ultraner.com/ai
 repository: https://github.com/Ultraner/ultraner-dart
 documentation: https://ultraner.com/docs
